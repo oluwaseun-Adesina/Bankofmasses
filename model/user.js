@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 
 //create user schema
 const UserSchema = new mongoose.Schema({
-    name: {
+    first_name: {
+        type: String,
+        required: true
+    },
+    last_name: {
         type: String,
         required: true
     },
@@ -33,24 +37,9 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         //required: true,
         default: []
+    },token: {
+        type: String,
     }
 });
 
-//generate random account number
-UserSchema.pre('save', async function (next) {
-    try {
-        const
-            user = this,
-            accountnumber = Math.floor(Math.random() * 1000000000);
-            Math.floor(100000 + Math.random() * 900000)
-            
-        user.accountnumber = accountnumber;
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
-//export user model
-//module.exports = User = mongoose.model('user', UserSchema);
 module.exports = mongoose.model('user', UserSchema);
