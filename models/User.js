@@ -43,6 +43,7 @@ UserSchema.pre('save', async function (next) {
             user = this,
             accountnumber = Math.floor(Math.random() * 1000000000);
             Math.floor(100000 + Math.random() * 900000)
+            
         user.accountnumber = accountnumber;
         next();
     } catch (error) {

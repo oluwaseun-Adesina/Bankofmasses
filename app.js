@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const ejs = require("ejs");
 const dotenv = require("dotenv");
-config = dotenv.config();
+config = dotenv.config(); 
 //const { registerValidation, loginValidation } = require('../validation');
 
 //middle ware
@@ -85,11 +85,15 @@ app.post("/register", async (req, res) => {
 
   //hash password
   const salt = await bcrypt.genSalt(10);
-  console.log(req.body.password);
-  console.log(req.body.email);
+  // console.log(req.body.password);
+  // console.log(req.body.email);
   const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
   ac = Math.floor(100000 + Math.random() * 900000);
+  console.log(ac)
+  ac =  "0" + String(ac) 
+  console.log(ac)
+  
 
   //create new user
   const user = new User({
