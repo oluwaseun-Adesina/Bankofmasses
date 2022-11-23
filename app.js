@@ -6,14 +6,30 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const cors = require("cors");
+const ejs = require("ejs");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
+app.set("view engine", "ejs");
+
+
+//static files 
+app.use(express.static("public"));
 //routes
 //register
+
+app.get("/", (req, res) => {
+    res.render("register");
+});
+
+app.get("/register", (req, res) => {
+    res.render("register");
+});
 
 app.post("/register", async (req, res) =>{
     const {firstName, lastName, email, password} = req.body;
@@ -30,7 +46,7 @@ app.post("/register", async (req, res) =>{
           res.status(400).send("All input is required");
         }
     
-        // check if user already exist
+        // check if user already exist 
         // Validate if user exist in our database
         const oldUser = await User.findOne({ email });
     
@@ -65,7 +81,9 @@ app.post("/register", async (req, res) =>{
         user.token = token;
     
         // return new user
-        res.status(201).json(user);
+        //res.status(201).json(user);
+
+        res.render("login");
       } catch (err) {
         console.log(err);
       }
@@ -74,8 +92,13 @@ app.post("/register", async (req, res) =>{
 
 })
 
-
+  
 //login
+
+app.get("/login", (req, res) => {
+    res.render("login");
+});
+
 app.post("/login", async (req, res) => {
 
     // Our login logic starts here
@@ -104,7 +127,9 @@ app.post("/login", async (req, res) => {
         user.token = token;
   
         // user
-        return res.status(200).json(user);
+        //return res.status(200).json(user);
+        console.log(user)
+        return res.status(200).render("dashboard", {user: user});
       }
       return res.status(400).send("Invalid Credentials");
     } catch (err) {
@@ -123,6 +148,11 @@ app.get('/welcome', cors(), auth, (req, res) => {
   });
 
 //transaction
+
+app.get("/transaction", (req, res) => {
+    res.render("transaction");
+});
+
 app.post("/transaction", auth, async (req, res) => {
     const { accountnumber, amount, type } = req.body;
     const { user_id } = req.user;
@@ -161,16 +191,22 @@ app.post("/transaction", auth, async (req, res) => {
 
 
 //transfer money
-app.post("/transfer", auth, async (req, res) => {
+
+app.get("/transfer", (req, res) => {
+    res.render("transfer");
+});
+
+
+app.post("/transfer", async (req, res) => {
     const { accountnumber, amount } = req.body;
-    const { user_id } = req.user;
+    //const { user_id } = req.user;
     
     try {
         // Get user input
         const { accountnumber, amount } = req.body;
-        const { user_id } = req.user;
+        //const { user_id } = req.user; 
 
-        // Validate user input
+        // Validate user input 
         if (!(accountnumber && amount)) {
             res.status(400).send("All input is required");
 
@@ -179,15 +215,15 @@ app.post("/transfer", auth, async (req, res) => {
         const user = await User.findOne ({ accountnumber });
         if (user) {
             // Create token
-            const token = jwt.sign(
-                { user_id: user._id, accountnumber },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "5h",
-                }
-            );
-            // save user token
-            user.token = token;
+            // const token = jwt.sign(
+            //     { user_id: user._id, accountnumber },
+            //     process.env.TOKEN_KEY,
+            //     {
+            //         expiresIn: "5h",
+            //     }
+            // );
+            // // save user token
+            // user.token = token;
             // user
             //return res.status(200).json(user);
             
@@ -215,14 +251,19 @@ app.post("/transfer", auth, async (req, res) => {
 
 
 //deposit money
-app.post("/deposit", auth, async (req, res) => {
+
+app.get("/deposit", (req, res) => {
+    res.render("deposit");
+}); 
+
+app.post("/deposit", async (req, res) => {
     const { accountnumber, amount } = req.body;
-    const { user_id } = req.user;
+    //const { user_id } = req.user;
 
     try {
         // Get user input
         const { accountnumber, amount } = req.body;
-        const { user_id } = req.user;
+        //const { user_id } = req.user;
 
         // Validate user input
         if (!(accountnumber && amount)) {
@@ -233,15 +274,15 @@ app.post("/deposit", auth, async (req, res) => {
         const user = await User.findOne ({ accountnumber });
         if (user) {
             // Create token
-            const token = jwt.sign(
-                { user_id: user._id, accountnumber },
-                process.env.TOKEN_KEY,
-                {
-                    expiresIn: "5h",
-                }
-            );
+            // const token = jwt.sign(
+            //     { user_id: user._id, accountnumber },
+            //     process.env.TOKEN_KEY,
+            //     {
+            //         expiresIn: "5h",
+            //     }
+            // );
             // save user token
-            user.token = token;
+            //user.token = token;
             // user
             //return res.status(200).json(user);
 

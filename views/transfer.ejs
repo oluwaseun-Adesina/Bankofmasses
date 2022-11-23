@@ -1,0 +1,43 @@
+<%- include('./partials/header.ejs') %> 
+<%- include ('./partials/navbar.ejs') %>
+
+<section style="background-color: #f9c9aa;">
+    <div class="container py-5">
+      <div class="row d-flex justify-content-center">
+        <div class="col-md-9 col-lg-7 col-xl-5">
+          <div class="card">
+
+            <div class="rounded-bottom" style="background-color: #eee;">
+              <div class="card-body">
+                <p class="mb-4">Enter the details for your transfer</p>
+  
+                <form class="mx-1 mx-md-4" action="/transfer" method="post" >
+                    <div class="form-outline mb-3">
+                    <input type="text" id="formControlLgXM8" class="form-control"
+                        placeholder="1234 5678 1234 5678" name="accountnumber"/>
+                    <label class="form-label" for="formControlLgXM8">Account Number</label>
+                    </div>
+
+                    <div class="form-outline mb-3">
+                        <input type="text" id="formControlLgXM8" class="form-control"
+                        placeholder="1234 5678 1234 5678" name="amount"/>
+                        <label class="form-label" for="formControlLgXM8">Amount</label>
+                    </div>
+    
+    
+                    <!-- <button class="btn btn-info btn-block" type="submit">Transfer</button> -->
+                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                        <!-- <button type="button" class="btn btn-primary btn-lg">Register</button> -->
+  
+                        <input type="submit" value="Transfer" class="btn btn-info btn-block">
+                      </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%- include ('./partials/footer.ejs') %>
