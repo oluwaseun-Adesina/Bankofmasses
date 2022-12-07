@@ -2,12 +2,13 @@ require("dotenv").config();
 require("./config/database").connect();
 const User = require("./model/user");
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("./middleware/auth");
 const cors = require("cors");
 const ejs = require("ejs");
 const bodyParser = require("body-parser");
+const session = require('express-session')
 
 const app = express();
 
@@ -24,11 +25,11 @@ app.use(express.static("public"));
 //register
 
 app.get("/", (req, res) => {
-    res.render("register");
+    return res.render("register", {user: null});
 });
 
 app.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", {user: null});
 });
 
 app.post("/register", async (req, res) =>{
@@ -79,6 +80,7 @@ app.post("/register", async (req, res) =>{
         );
         // save user token
         user.token = token;
+        
     
         // return new user
         //res.status(201).json(user);
@@ -96,7 +98,7 @@ app.post("/register", async (req, res) =>{
 //login
 
 app.get("/login", (req, res) => {
-    res.render("login");
+    res.render("login", {user: null});
 });
 
 app.post("/login", async (req, res) => {
@@ -125,6 +127,8 @@ app.post("/login", async (req, res) => {
   
         // save user token
         user.token = token;
+
+        // req.session.user = user;
   
         // user
         //return res.status(200).json(user);
